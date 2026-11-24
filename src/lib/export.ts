@@ -52,6 +52,57 @@ export function emailToMarkdown(draft: EmailDraft): string {
   return `Subject: ${draft.subject}\n\n${draft.body}\n`;
 }
 
+/** Action items as a Markdown checklist, ready to paste into Notion/Linear/Slack. */
+export function actionItemsToMarkdown(
+  items: MeetingRecord["result"]["actionItems"],
+): string {
+  if (items.length === 0) return "";
+  return items
+    .map(
+      (a) =>
+        `- [ ] ${a.task}${a.owner ? ` (@${a.owner})` : ""}${a.dueDate ? ` (due ${a.dueDate})` : ""}${a.priority ? ` [${a.priority}]` : ""}`,
+    )
+    .join("\n");
+}
+
+/** Decisions as a Markdown list. */
+export function decisionsToMarkdown(
+  decisions: MeetingRecord["result"]["decisions"],
+): string {
+  if (decisions.length === 0) return "";
+  return decisions
+    .map((d) => `- ${d.decision}${d.context ? ` — ${d.context}` : ""}`)
+    .join("\n");
+}
+
+/** Key points as a Markdown bullet list. */
+export function keyPointsToMarkdown(points: string[]): string {
+  if (points.length === 0) return "";
+  return points.map((k) => `- ${k}`).join("\n");
+}
+
+/** Participants as a comma-separated list. */
+export function participantsToText(participants: string[]): string {
+  return participants.join(", ");
+}
+
+/** Everything the user has — meetings plus the latest synthesis — as one JSON backup. */
+export function exportAllJson(
+  meetings: MeetingRecord[],
+  synthesis: import("./types").SynthesisRecord | null,
+): string {
+  return JSON.stringify(
+    {
+      app: "meeting-scribe",
+      exportedAt: new Date().toISOString(),
+      meetings,
+      synthesis,
+    },
+    null,
+    2,
+  );
+}
+
 export function synthesisToMarkdown(
   synthesis: SynthesisResult,
   meetingTitles: string[],

@@ -9,8 +9,8 @@ export const SAMPLE_TRANSCRIPTS: SampleTranscript[] = [
   {
     id: "sprint-planning",
     title: "Sprint Planning — Atlas Mobile App",
-    description: "Short planning meeting. Routes on-device in Auto mode.",
-    transcript: `Maya: Good morning, everyone. Sprint 14 planning — we have two weeks, ending Friday, November 28. Let's start with the backlog. Top item is offline mode for the field checklist. Jordan, how big is that?
+    description: "Short planning meeting.",
+    transcript: `Maya: Good morning, everyone. Sprint 14 planning — we have two weeks, ending Saturday, November 28. Let's start with the backlog. Top item is offline mode for the field checklist. Jordan, how big is that?
 
 Jordan: The checklist screen needs to work with no signal, then sync when we're back online. I estimate five points, mostly local storage and a sync queue. The tricky part is conflict handling if two people edit the same item.
 
@@ -32,16 +32,16 @@ Jordan: Yes, I'm out Thursday. So my capacity is eight points, not thirteen.
 
 Maya: Understood. Let's commit: offline mode at seven points, onboarding at three points, and the settings redesign at five points. That's fifteen total, which fits. Priya, can you take the settings API changes?
 
-Priya: Yes, I'll have the endpoints ready by Wednesday, November 26.
+Priya: Yes, I'll have the endpoints ready by Thursday, November 26.
 
-Sam: And I'll deliver the final settings mockups by Tuesday, November 25.
+Sam: And I'll deliver the final settings mockups by Wednesday, November 25.
 
-Maya: Perfect. Action items: Jordan builds offline mode and onboarding, due Friday, November 28. Priya delivers settings endpoints by Wednesday, November 26. Sam delivers settings mockups by Tuesday, November 25. I'll send the sprint summary to the team today. Any blockers? No? Then we're done — thanks, everyone.`,
+Maya: Perfect. Action items: Jordan builds offline mode and onboarding, due Saturday, November 28. Priya delivers settings endpoints by Thursday, November 26. Sam delivers settings mockups by Wednesday, November 25. I'll send the sprint summary to the team today. Any blockers? No? Then we're done — thanks, everyone.`,
   },
   {
     id: "client-onboarding",
     title: "Client Onboarding Kickoff — Northwind Retail",
-    description: "Kickoff with an external client. Routes on-device in Auto mode.",
+    description: "Kickoff with an external client.",
     transcript: `Maya: Welcome, everyone, and thanks for joining the Northwind kickoff. I'm Maya, project lead. With me are Jordan from engineering and Priya from data. From Northwind we have Daniel, the operations director, and Sofia, the store systems manager. Goal for today: agree on the rollout plan for the inventory app across your twelve stores.
 
 Daniel: Thanks, Maya. Our biggest pain is stock counts. Right now each store counts by hand on Sundays, and the numbers are wrong about twenty percent of the time. We need the app live before the holiday rush, so mid-December at the latest.
@@ -52,11 +52,11 @@ Jordan: Android 10 is fine, we support back to Android 9. Offline mode is alread
 
 Priya: For the data side, we need a product export from your system. A nightly CSV with SKU, name, current stock, and price would be enough to start. Can you provide that, Sofia?
 
-Sofia: Yes, our system can export CSV every night at 2 a.m. I'll send a sample file by Friday, November 28.
+Sofia: Yes, our system can export CSV every night at 2 a.m. I'll send a sample file by Saturday, November 28.
 
 Maya: Great. Decision: we will launch with the CSV import for product data, and revisit a live API integration in phase two. Daniel, does mid-December work if we start the pilot in two stores first?
 
-Daniel: A two-store pilot is smart. Let's pilot in the downtown and Riverside stores starting Monday, December 1, then roll out to the other ten stores by December 15, assuming the pilot goes well.
+Daniel: A two-store pilot is smart. Let's pilot in the downtown and Riverside stores starting Tuesday, December 1, then roll out to the other ten stores by December 15, assuming the pilot goes well.
 
 Maya: Agreed. Training: Sofia, how many staff per store need training?
 
@@ -64,7 +64,7 @@ Sofia: About six per store, so seventy-two people total. We can do one remote se
 
 Jordan: I'll record a five-minute training video too, so new staff can catch up without another session.
 
-Maya: Action items: Sofia sends the sample product CSV by Friday, November 28. Priya builds the CSV import by Wednesday, December 3. Jordan delivers the offline-capable build for the pilot by Friday, November 28. I'll send the pilot checklist and the training schedule by tomorrow. Daniel will confirm the two pilot stores by end of day today.
+Maya: Action items: Sofia sends the sample product CSV by Saturday, November 28. Priya builds the CSV import by Thursday, December 3. Jordan delivers the offline-capable build for the pilot by Saturday, November 28. I'll send the pilot checklist and the training schedule by tomorrow. Daniel will confirm the two pilot stores by end of day today.
 
 Daniel: Downtown and Riverside are confirmed — you can put that in writing.
 
@@ -73,8 +73,8 @@ Maya: Excellent. One more decision: the pilot success bar is a stock-count error
   {
     id: "incident-review",
     title: "Incident Review — Checkout Outage, Nov 14",
-    description: "Longer postmortem. Routes to the cloud in Auto mode.",
-    transcript: `Maya: Thanks for joining the incident review for the checkout outage on Friday, November 14. This is a blameless review — we are here to understand what happened and fix the system, not to point fingers. Timeline first. Priya, can you walk us through it?
+    description: "Longer postmortem.",
+    transcript: `Maya: Thanks for joining the incident review for the checkout outage on Saturday, November 14. This is a blameless review — we are here to understand what happened and fix the system, not to point fingers. Timeline first. Priya, can you walk us through it?
 
 Priya: Sure. At 10:42 a.m., the payment service started returning 500 errors. Our alerting fired at 10:47, five minutes later, because the alert threshold needed three consecutive failed checks. Jordan was on call and acknowledged the page at 10:51. He found the database connection pool was exhausted — the checkout service had opened over two thousand connections after a deploy that morning.
 
@@ -94,13 +94,13 @@ Priya: I agree on all four. I'd add a fifth: the connection pool has no per-serv
 
 Maya: Decisions. One: we add exponential backoff and a circuit breaker to every external call — Jordan, that's yours. Two: we lower the alert threshold to page after one minute of checkout errors, not five. Three: the status page gets an automatic update when the checkout error rate crosses two percent. Four: load tests must include a slow-dependency scenario before any deploy touching the payment path.
 
-Jordan: For the circuit breaker, I'll use the library we already have in the inventory service. I can have it in place by Friday, November 21. The load test scenario will take longer — I need to build a slow-provider stub. I'll aim for Wednesday, November 26.
+Jordan: For the circuit breaker, I'll use the library we already have in the inventory service. I can have it in place by Saturday, November 21. The load test scenario will take longer — I need to build a slow-provider stub. I'll aim for Thursday, November 26.
 
-Priya: I'll take the alert threshold change and the automatic status page update. Both are small — I can ship them by Wednesday, November 19.
+Priya: I'll take the alert threshold change and the automatic status page update. Both are small — I can ship them by Thursday, November 19.
 
-Sam: I'll write the support holding message templates so the team has approved replies ready. I'll have a draft by tomorrow, and the final version by Friday, November 21.
+Sam: I'll write the support holding message templates so the team has approved replies ready. I'll have a draft by tomorrow, and the final version by Saturday, November 21.
 
-Maya: Action items: Jordan implements backoff plus circuit breaker by Friday, November 21, and the slow-dependency load test by Wednesday, November 26. Priya ships the faster alerting and automatic status page updates by Wednesday, November 19. Sam delivers support message templates by Friday, November 21. I'll schedule a follow-up review in two weeks to confirm all fixes are live.
+Maya: Action items: Jordan implements backoff plus circuit breaker by Saturday, November 21, and the slow-dependency load test by Thursday, November 26. Priya ships the faster alerting and automatic status page updates by Thursday, November 19. Sam delivers support message templates by Saturday, November 21. I'll schedule a follow-up review in two weeks to confirm all fixes are live.
 
 Priya: Before we close, one more thing on detection. The five-minute alert delay happened because the check runs every minute and needs three failures in a row. If we switch to a thirty-second check with a two-failure threshold, we'd page in about a minute. The risk is more false pages, but checkout is our revenue path — I'd rather page early.
 
@@ -114,10 +114,10 @@ Priya: That's a good catch. I'll add their status feed to our monitoring, plus a
 
 Sam: From the customer side, we should also think about compensation. Six hundred lost orders is significant. Marketing is preparing a ten-percent discount code for affected customers. I'll coordinate with them so the support team uses the same message.
 
-Maya: Decisions, then: five, we add the provider status feed to monitoring and a degraded-mode switch for checkout. Six, support will use the approved discount code message for affected customers. Priya, the monitoring work is yours — can you have it by Friday, November 21 as well?
+Maya: Decisions, then: five, we add the provider status feed to monitoring and a degraded-mode switch for checkout. Six, support will use the approved discount code message for affected customers. Priya, the monitoring work is yours — can you have it by Saturday, November 21 as well?
 
-Priya: The status feed integration is small, yes — Friday, November 21. The degraded-mode switch is bigger; it needs product approval. I'll write the proposal by Monday, November 24, and we can decide in the next planning meeting.
+Priya: The status feed integration is small, yes — Saturday, November 21. The degraded-mode switch is bigger; it needs product approval. I'll write the proposal by Tuesday, November 24, and we can decide in the next planning meeting.
 
-Maya: Perfect. Final action items: Jordan adds the connection pool dashboard panel by Friday, November 21. Priya integrates the provider status feed by Friday, November 21, and writes the degraded-mode proposal by Monday, November 24. Sam coordinates the discount code messaging with marketing by Wednesday, November 19. I'll send the written incident report to leadership by tomorrow, and book the follow-up review for Friday, December 5. Anything else? Thanks, everyone — good discussion.`,
+Maya: Perfect. Final action items: Jordan adds the connection pool dashboard panel by Saturday, November 21. Priya integrates the provider status feed by Saturday, November 21, and writes the degraded-mode proposal by Tuesday, November 24. Sam coordinates the discount code messaging with marketing by Thursday, November 19. I'll send the written incident report to leadership by tomorrow, and book the follow-up review for Saturday, December 5. Anything else? Thanks, everyone — good discussion.`,
   },
 ];

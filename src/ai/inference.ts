@@ -39,7 +39,7 @@ import {
  * never assumes, it reports.
  */
 
-export const CLOUD_MODEL = "gemini-2.5-flash";
+export const CLOUD_MODEL = "gemini-3-flash-preview";
 /** Auto-routing threshold: transcripts up to this length try on-device first. */
 export const ON_DEVICE_CHAR_LIMIT = 6000;
 
@@ -166,6 +166,63 @@ function describeRun(
 export interface ProgressUpdate {
   stage: string;
   progress?: number;
+}
+
+/**
+ * Translate a raw SDK/transport error into words a person can act on.
+ * Never surface provider internals (API names, console pages, status codes).
+ * The `ctx` keeps the advice honest: the "try a shorter transcript" hint
+ * only makes sense when on-device is actually available and the transcript
+ * is long enough to matter — otherwise it misleads.
+ */
+export interface HumanError {
+  title: string;
+  detail: string;
+  retryable: boolean;
+}
+
+export function humanizeError(
+  err: unknown,
+  ctx?: { onDeviceAvailable?: boolean; transcriptChars?: number },
+): HumanError {
+  const msg = err instanceof Error ? err.message : String(err ?? "");
+  if (/403|PERMISSION_DENIED|permission denied|quota|exhausted/i.test(msg)) {
+    const onDeviceAvailable = ctx?.onDeviceAvailable ?? true;
+    const chars = ctx?.transcriptChars ?? 0;
+    let detail = "The free usage quota may have been reached. Try again later.";
+    if (onDeviceAvailable && chars > ON_DEVICE_CHAR_LIMIT) {
+      detail +=
+        " Or try a shorter transcript (under ~6,000 characters) to run on-device.";
+    } else if (!onDeviceAvailable) {
+      detail +=
+        " On-device inference isn't available in this browser, so there's no fallback route right now.";
+    }
+    return {
+      title: "Cloud AI is temporarily unavailable",
+      detail,
+      retryable: true,
+    };
+  }
+  if (/timeout|timed out|AbortError|deadline/i.test(msg)) {
+    return {
+      title: "Request timed out",
+      detail:
+        "The transcript might be too long for a single pass, or the connection dropped.",
+      retryable: true,
+    };
+  }
+  if (/network|fetch failed|Failed to fetch|offline|ERR_INTERNET/i.test(msg)) {
+    return {
+      title: "You're offline",
+      detail: "Check your connection and try again.",
+      retryable: true,
+    };
+  }
+  return {
+    title: "Something went wrong",
+    detail: "The request couldn't be completed. Try again.",
+    retryable: true,
+  };
 }
 
 export async function analyzeTranscript(

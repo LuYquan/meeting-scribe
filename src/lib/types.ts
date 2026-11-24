@@ -36,6 +36,12 @@ export interface EmailDraft {
   body: string;
 }
 
+/** A saved follow-up email: the draft plus the run that produced it. */
+export interface EmailRecord {
+  draft: EmailDraft;
+  run: RunInfo;
+}
+
 export interface SynthesisTheme {
   theme: string;
   evidence: string;
@@ -64,4 +70,12 @@ export interface RunInfo {
   latencyMs: number;
   /** Human-readable note, e.g. what was tried and what actually ran. */
   note: string;
+}
+
+/** A cross-meeting synthesis, kept across reloads like a meeting. */
+export interface SynthesisRecord {
+  synthesis: SynthesisResult;
+  run: RunInfo;
+  meetingIds: string[];
+  createdAt: string;
 }
